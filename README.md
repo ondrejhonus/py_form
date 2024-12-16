@@ -1,13 +1,6 @@
 # About
 A simple python flask app that stores data in a database and hosts a web server where you can add or remove users
 
-## Table of Contents
-- [Installation](#installation)
-- [Usage](#usage)
-- [Features](#features)
-- [Contributing](#contributing)
-- [License](#license)
-
 ## Installation
 
 To install, follow these steps:
