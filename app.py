@@ -3,6 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_wtf import FlaskForm
 from wtforms import StringField, IntegerField, SubmitField
 from wtforms.validators import DataRequired
+from flask_migrate import Migrate
 
 # Initialize the Flask app and configure the database
 app = Flask(__name__)
@@ -10,6 +11,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'  # Path to datab
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False  # Disable modification tracking to save resources
 app.config['SECRET_KEY'] = 'mysecretkey'  # Secret key for CSRF protection
 db = SQLAlchemy(app)
+migrate = Migrate(app, db)
 
 # Define a class that maps to a database table
 class Person(db.Model):
@@ -20,10 +22,6 @@ class Person(db.Model):
     def __repr__(self):
         return f"<Person {self.name}, {self.age}>"
 
-# Create the tables in the database (only need to run once)
-with app.app_context():
-    db.create_all()
-
 # WTForm for adding a new person
 class PersonForm(FlaskForm):
     id = IntegerField('ID')
@@ -32,7 +30,6 @@ class PersonForm(FlaskForm):
     submit = SubmitField('Add Person')
 
 # Routes
-
 @app.route('/')
 def index():
     # Get all persons from the database
