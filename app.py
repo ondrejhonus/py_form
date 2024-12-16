@@ -26,6 +26,7 @@ with app.app_context():
 
 # WTForm for adding a new person
 class PersonForm(FlaskForm):
+    id = IntegerField('ID')
     name = StringField('Name', validators=[DataRequired()])
     age = IntegerField('Age', validators=[DataRequired()])
     submit = SubmitField('Add Person')
@@ -43,7 +44,7 @@ def add():
     form = PersonForm()
     if form.validate_on_submit():
         # Create a new Person object and add it to the database
-        new_person = Person(name=form.name.data, age=form.age.data)
+        new_person = Person(name=form.name.data, age=form.age.data, id=form.id.data)
         db.session.add(new_person)
         db.session.commit()
         return redirect(url_for('index'))
