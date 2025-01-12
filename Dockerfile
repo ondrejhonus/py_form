@@ -10,6 +10,9 @@ COPY . /app
 # Copy requirements.txt before installing dependencies
 COPY requirements.txt /app/
 
+# Upgrade pip to the latest version
+RUN pip install --upgrade pip
+
 # Install Flask
 RUN pip install flask
 
@@ -24,3 +27,4 @@ ENV FLASK_APP=app.py
 
 # Run app.py when the container launches
 CMD ["flask", "run", "--host=0.0.0.0", "--port=5000"]
+
