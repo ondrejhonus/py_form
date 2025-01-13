@@ -10,6 +10,10 @@
     <div class="container">
         <h1>Person List</h1>
         <a href="{{ url_for('add') }}" class="btn btn-primary">Add Person</a>
+
+        <!-- Import macros -->
+        {% import 'macros.html' as macros %}
+
         <table class="table table-striped">
             <thead>
                 <tr>
@@ -22,9 +26,9 @@
             <tbody>
                 {% for person in persons %}
                 <tr>
-                    <td>{{ person.id }}</td>
-                    <td>{{ person.name }}</td>
-                    <td>{{ person.age }}</td>
+                    <td>{{ macros.render_input("id", person.id, readonly=True) }}</td>
+                    <td>{{ macros.render_input("name", person.name, readonly=True) }}</td>
+                    <td>{{ macros.render_input("age", person.age, readonly=True) }}</td>
                     <td>
                         <a href="{{ url_for('delete', id=person.id) }}" class="btn btn-danger">Delete</a>
                     </td>

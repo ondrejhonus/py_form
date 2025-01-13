@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for
 from flask_wtf import FlaskForm
-from wtforms import SelectField, IntegerField, SubmitField
+from wtforms import StringField, IntegerField, SubmitField
 from wtforms.validators import DataRequired
 from models import db, Person
 
@@ -15,21 +15,9 @@ db.init_app(app)
 
 # WTForm for adding a new person
 class PersonForm(FlaskForm):
-    id = IntegerField('ID')
-    name = SelectField('Name', choices=[], validators=[DataRequired()])
+    name = StringField('Name', validators=[DataRequired()])
     age = IntegerField('Age', validators=[DataRequired()])
     submit = SubmitField('Add Person')
-
-# Create the tables and populate initial data if not already present
-with app.app_context():
-    db.create_all()
-    if not Person.query.first():
-        db.session.add_all([
-            Person(name='Alice', age=30),
-            Person(name='Bob', age=25),
-            Person(name='Charlie', age=35)
-        ])
-        db.session.commit()
 
 @app.route('/')
 def index():
@@ -39,12 +27,13 @@ def index():
 @app.route('/add', methods=['GET', 'POST'])
 def add():
     form = PersonForm()
-    form.name.choices = [(person.name, person.name) for person in Person.query.all()]
+    
     if form.validate_on_submit():
-        new_person = Person(name=form.name.data, age=form.age.data, id=form.id.data)
+        new_person = Person(name=form.name.data, age=form.age.data)
         db.session.add(new_person)
         db.session.commit()
         return redirect(url_for('index'))
+    
     return render_template('add.html', form=form)
 
 @app.route('/delete/<int:id>')
