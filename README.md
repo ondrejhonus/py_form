@@ -29,5 +29,5 @@ To install, follow these steps:
 
 1. **Run the application:**
     ```
-    python main.py
+    python app.py
     ```
