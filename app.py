@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for
 from flask_wtf import FlaskForm
 from wtforms import StringField, IntegerField, SubmitField
-from wtforms.validators import DataRequired
+from wtforms.validators import DataRequired, Length, NumberRange, Regexp
 from models import db, Person
 
 # Initialize the Flask app and configure the database
@@ -13,10 +13,15 @@ app.config['SECRET_KEY'] = 'mysecretkey'  # Secret key for CSRF protection
 # Initialize the database
 db.init_app(app)
 
-# WTForm for adding a new person
+# WTForm for adding a new person with validators
 class PersonForm(FlaskForm):
-    name = StringField('Name', validators=[DataRequired()])
-    age = IntegerField('Age', validators=[DataRequired()])
+    # Adding a custom regex validator to ensure that the name contains no numbers
+    name = StringField('Name', validators=[
+        DataRequired(), 
+        Length(min=2, max=50),
+        Regexp(r'^[A-Za-z\s]+$', message="Name cannot contain numbers or special characters.")
+    ])
+    age = IntegerField('Age', validators=[DataRequired(), NumberRange(min=0, max=120)])
     submit = SubmitField('Add Person')
 
 @app.route('/')
